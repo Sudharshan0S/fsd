@@ -1,0 +1,93 @@
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Image Gallery Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .buttons {
+      margin-bottom: 20px;
+    }
+
+    .buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      border: none;
+      background-color: #4285f4;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .gallery img {
+      width: 200px;
+      height: 150px;
+      object-fit: cover;
+      margin: 10px;
+      border-radius: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Image Gallery Filter</h2>
+
+  <div class="buttons" id="buttonContainer">
+    <!-- Buttons will be generated here -->
+  </div>
+
+  <div class="gallery" id="gallery">
+    <img src="a.png" data-tags="forest" alt="Kitten">
+    <img src="b.png" data-tags="frames" alt="Bear">
+    <img src="c.png" data-tags="yellow" alt="hills">
+    <img src="d..png" data-tags="people" alt="Beach">
+    <img src="e.webp" data-tags="man" alt="Bird">
+  </div>
+
+  <script>
+    const images = document.querySelectorAll("#gallery img");
+    const buttonContainer = document.getElementById("buttonContainer");
+
+    const tagged = {};
+
+    // Collect tags from each image
+    images.forEach(img => {
+      const tags = img.dataset.tags.split(" ");
+      tags.forEach(tag => {
+        if (!tagged[tag]) {
+          tagged[tag] = [];
+        }
+        tagged[tag].push(img);
+      });
+    });
+
+    // Create "All" button
+    const allButton = document.createElement("button");
+    allButton.textContent = "All";
+    allButton.addEventListener("click", () => {
+      images.forEach(img => img.classList.remove("hidden"));
+    });
+    buttonContainer.appendChild(allButton);
+
+    // Create tag buttons
+    Object.keys(tagged).forEach(tag => {
+      const button = document.createElement("button");
+      button.textContent = tag;
+      button.addEventListener("click", () => {
+        images.forEach(img => img.classList.add("hidden")); // Hide all
+        tagged[tag].forEach(img => img.classList.remove("hidden")); // Show selected
+      });
+      buttonContainer.appendChild(button);
+    });
+  </script>
+
+</body>
+</html>
